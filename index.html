@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <title>Ace Room — Online Card Game</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-mark">♠</div>
+      <div><div class="brand-name">ACE ROOM</div><div class="brand-sub">ONLINE CARD TABLE</div></div>
+      <div class="wallet-pill">🪙 <span id="creditCount">0</span></div>
+    </header>
+
+    <main>
+      <section id="nameScreen" class="screen active">
+        <div class="hero">
+          <div class="eyebrow">PLAY WITH FRIENDS</div>
+          <h1>Your table.<br><span>Your rules.</span></h1>
+          <p>A browser-based card room with virtual credits only.</p>
+        </div>
+        <div class="panel">
+          <label for="playerName">Choose your player name</label>
+          <input id="playerName" maxlength="18" placeholder="Enter nickname" autocomplete="nickname">
+          <button id="enterBtn" class="primary full">Enter the Lobby <span>→</span></button>
+          <p class="tiny-note">Virtual credits have no cash value. No real-money deposits or withdrawals.</p>
+        </div>
+      </section>
+
+      <section id="lobbyScreen" class="screen">
+        <div class="section-heading"><div><div class="eyebrow">MAIN MENU</div><h2>Choose your table</h2></div></div>
+        <div class="mode-grid">
+          <button class="mode-card featured" data-create="private"><span class="mode-icon">🔐</span><strong>Join Room</strong><small>Enter a friend's room code</small></button>
+          <button class="mode-card" data-create="ace"><span class="mode-icon">🂡</span><strong>Ace Room</strong><small>A♦ decides the dealer</small></button>
+          <button class="mode-card" data-create="dealer"><span class="mode-icon">👑</span><strong>Dealer Room</strong><small>Dealer rotates every 3 rounds</small></button>
+          <button class="mode-card" data-create="bot"><span class="mode-icon">🤖</span><strong>Bot Room</strong><small>Practice with demo bots</small></button>
+        </div>
+        <div id="joinPanel" class="panel hidden">
+          <label for="roomCode">Room code</label>
+          <div class="inline-form"><input id="roomCode" placeholder="e.g. A1B2C3" maxlength="6"><button id="joinBtn" class="primary">Join</button></div>
+        </div>
+        <div class="utility-grid">
+          <button class="utility-card" id="depositOpen">🪙 <span><strong>Coin Deposit</strong><small>Get demo credits</small></span><b>›</b></button>
+          <button class="utility-card" id="historyOpen">📜 <span><strong>Game History</strong><small>Recent virtual results</small></span><b>›</b></button>
+        </div>
+      </section>
+
+      <section id="roomScreen" class="screen">
+        <button class="back-link" id="leaveRoom">← Leave room</button>
+        <div class="room-banner">
+          <div><div class="eyebrow" id="roomModeLabel">PRIVATE ROOM</div><h2>Room <span id="roomCodeLabel">------</span></h2></div>
+          <button id="copyCode" class="secondary">Copy code</button>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><h3>Players</h3><span id="seatCount" class="badge">0/4</span></div>
+          <div id="playerList" class="player-list"></div>
+          <div class="room-actions"><button id="startGame" class="primary full">Start Game</button></div>
+          <p class="tiny-note">Private rooms need at least 2 human players. Share the code to invite friends.</p>
+        </div>
+        <div id="gamePanel" class="panel hidden">
+          <div class="game-status"><span class="live-dot"></span><span id="phaseLabel">Waiting to start</span><span class="timer" id="timerLabel">--</span></div>
+          <div class="bet-row">
+            <span>Virtual bet</span>
+            <div class="bet-buttons"><button data-bet="5">5</button><button data-bet="10">10</button><button data-bet="15">15</button></div>
+          </div>
+          <p id="betInfo" class="tiny-note">Choose a bet during the betting phase.</p>
+          <div id="handArea" class="hidden">
+            <div class="hand-heading"><h3>Your 13 cards</h3><span id="selectedCount">0 selected</span></div>
+            <p class="tiny-note">Tap cards to select them, then tap a row to place them. Front 3 · Middle 5 · Back 5.</p>
+            <div id="cardHand" class="card-hand"></div>
+            <div class="row-slots">
+              <div class="slot-row"><div><strong>Front</strong><small>3 cards</small></div><div id="frontSlots" class="slots" data-row="front"></div></div>
+              <div class="slot-row"><div><strong>Middle</strong><small>5 cards</small></div><div id="middleSlots" class="slots" data-row="middle"></div></div>
+              <div class="slot-row"><div><strong>Back</strong><small>5 cards</small></div><div id="backSlots" class="slots" data-row="back"></div></div>
+            </div>
+            <div class="arrange-actions"><button id="autoArrange" class="secondary">Auto arrange</button><button id="submitHand" class="primary">Submit hand</button></div>
+          </div>
+          <div id="resultsArea" class="hidden"></div>
+        </div>
+      </section>
+
+      <section id="depositScreen" class="screen">
+        <button class="back-link" data-back>← Back to lobby</button>
+        <div class="hero compact"><div class="eyebrow">VIRTUAL WALLET</div><h1>Coin <span>Deposit</span></h1><p>Demo credits for playing only. No real payments.</p></div>
+        <div class="panel">
+          <div class="balance-card"><small>YOUR BALANCE</small><strong>🪙 <span id="depositBalance">0</span></strong><p>Virtual credits · no cash value</p></div>
+          <h3>Choose demo credits</h3>
+          <div class="credit-options"><button data-credit="100">+100 <small>Demo credits</small></button><button data-credit="500">+500 <small>Demo credits</small></button><button data-credit="1000">+1,000 <small>Demo credits</small></button></div>
+          <p class="tiny-note">This button only updates the in-game demo balance. It does not connect to a payment service.</p>
+        </div>
+      </section>
+
+      <section id="historyScreen" class="screen">
+        <button class="back-link" data-back>← Back to lobby</button>
+        <div class="hero compact"><div class="eyebrow">YOUR ACTIVITY</div><h1>Game <span>History</span></h1><p>Your recent virtual-credit results.</p></div>
+        <div id="historyList" class="panel"><p class="muted">Loading history…</p></div>
+      </section>
+    </main>
+    <div id="toast" class="toast" role="status"></div>
+    <footer>ACE ROOM · FOR ENTERTAINMENT ONLY · VIRTUAL CREDITS HAVE NO CASH VALUE</footer>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/client.js"></script>
+</body>
+</html>
